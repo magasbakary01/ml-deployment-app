@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>ML Deployment</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<style>
+		body {
+			background-color: #f8f9fa;
+			padding: 20px;
+		}
+
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			background-color: #ffffff;
+			padding: 20px;
+			border-radius: 5px;
+		}
+
+		h1 {
+			text-align: center;
+		}
+
+		label {
+			font-weight: bold;
+		}
+
+		.btn {
+			margin-top: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>ML Deployment on contraceptive continuation</h1>
+	<form action="/predict" method="post">
+		<div class="container">
+			<div class="form-group">
+				<label for="age">Age:</label>
+				<input type="number" class="form-control" id="age" name="age">
+			</div>
+			<div class="form-group">
+				<label for="hhkidlt5">Number of children under 5 in household:</label>
+				<input type="number" class="form-control" id="hhkidlt5" name="hhkidlt5">
+			</div>
+			<div class="form-group">
+				<label for="hheadage">Age of household head:</label>
+				<input type="number" class="form-control" id="hheadage" name="hheadage">
+			</div>
+			<div class="form-group">
+				<label for="cheb">Total children ever born:</label>
+				<input type="number" class="form-control" id="cheb" name="cheb">
+			</div>
+			<div class="form-group">
+				<label for="marstat">Woman's current marital or union status:</label>
+				<select class="form-control" id="marstat" name="marstat">
+					<option value="10">Never married</option>
+					<option value="11">Unconsummated marriage</option>
+					<option value="21">Married</option>
+					<option value="22">Living together</option>
+					<option value="31">Widowed</option>
+					<option value="32">Divorced</option>
+					<option value="33">Separated/not living together</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="kiddesire">Desire for more children:</label>
+				<select class="form-control" id="kiddesire" name="kiddesire">
+					<option value="11">Wants within 2 years</option>
+					<option value="12">Wants after 2+ years</option>
+					<option value="13">Wants, unsure timing</option>
+					<option value="30">Undecided</option>
+					<option value="40">Wants no more</option>
+					<option value="61">Sterilized</option>
+					<option value="62">Declared infecund</option>
+					<option value="63">Never had sex</option>
+					<option value="99">Unknown</option>
+				</select>
+			</div>
+			<div>
+				<label for="wealthq">Household wealth index in quintiles:</label>
+				<select id="wealthq" name="wealthq">
+					<option value="1">Poorest</option>
+					<option value="2">Poorer</option>
+					<option value="3">Middle</option>
+					<option value="4">Richer</option>
+					<option value="5">Richest</option>
+				</select>
+			</div>
+			<div>
+				<label for="edyrtotal">Total years education:</label>
+				<input type="number" id="edyrtotal" name="edyrtotal">
+			</div>
+			<div>
+				<label for="husfertpref">Husband's desire for children:</label>
+				<select id="husfertpref" name="husfertpref">
+					<option value="1">Both want same</option>
+					<option value="2">Husband wants more</option>
+					<option value="3">Husband wants fewer</option>
+					<option value="7">Don't Know</option>
+					<option value="9">NIU (not in universe)</option>
+				</select>
+			</div>
+			<div>
+				<label for="fpldisreas5y">Reason of last discontinuation:</label>
+				<select id="fpldisreas5y" name="fpldisreas5y">
+					<option value="110">Became pregnant/Method failed</option>
+					<option value="120">Wanted to get pregnant</option>
+					<option value="130">Husband disapproved</option>
+					<option value="150">Side effects or health concerns</option>
+					<option value="151">Side effects, respondent</option>
+					<option value="160">Access or availability issues</option>
+					<option value="170">Wanted more effective method</option>
+					<option value="200">Inconvenient to use</option>
+					<option value="210">Infrequent sexual activity, or husband away or ill</option>
+					<option value="230">Cost of method</option>
+					<option value="240">Fatalistic</option>
+					<option value="250">Difficulty getting pregnant, menopause or amenorrheic</option>
+					<option value="300">Marital dissolution/Divorced or widowed</option>
+					<option value="996">Other reason</option>
+					<option value="997">NIU (not in universe)</option>
+				</select>
+			</div>
+			<div>
+				<label for="religion">Religion:</label>
+				<select id="religion" name="religion">
+					<option value="0">NO RELIGION</option>
+					<option value="1000">Muslim</option>
+					<option value="2000">Christian</option>
+					<option value="6000">Other</option>
+				</select>
+			</div>
+			<div>
+				<label for="country">COUNTRY:</label>
+				<select id="country" name="country">
+					<option value="854">Burkina Faso</option>
+					<option value="204">Benin</option>
+					<option value="384">Cote d'Ivoire</option>
+					<option value="288">Ghana</option>
+					<option value="324">Guinea</option>
+					<option value="430">Liberia</option>
+					<option value="466">Mali</option>
+					<option value="562">Niger</option>
+					<option value="566">Nigeria</option>
+					<option value="686">Senegal</option>
+				</select>
+			</div>
+			<div>
+				<label for="fpmethnow">FPMETHNOW:</label>
+				<select id="fpmethnow" name="fpmethnow">
+					<option value="102">IUD</option>
+					<option value="211">Periodic abstinence</option>
+					<option value="101">Pill</option>
+					<option value="110">Injections</option>
+					<option value="104">Condom</option>
+					<option value="120">Diaphragm/Foam/Jelly</option>
+					<option value="213">Abstinence</option>
+					<option value="232">Astrology</option>
+					<option value="300">OTHER METHOD, UNSPECIFIED</option>
+					<option value="220">Withdrawal</option>
+					<option value="103">Norplant/Implants</option>
+					<option value="130">Lactational amenorrhea (LAM)</option>
+					<option value="124">Foam or Jelly</option>
+					<option value="230">Other traditional/folkloric</option>
+					<option value="105">Female Condom</option>
+					<option value="150">Other modern method</option>
+					<option value="234">Strings</option>
+					<option value="121">Diaphragm</option>
+					<option value="212">Cycle Beads/Standard days</option>
+					<option value="140">Emergency contraception</option>
+					<option value="231">Herbs/Plants</option>
+				</select>
+			</div>
+			<div>
+				<label for="famstructr">Relationship structure in household:</label>
+				<select id="famstructr" name="famstructr">
+					<option value="0">No adults</option>
+					<option value="1">One adult</option>
+					<option value="2">Two adults, opposite sex</option>
+					<option value="3">Two adults, same sex</option>
+					<option value="4">Three plus related adults</option>
+					<option value="5">Unrelated adults</option>
+				</select>
+			</div>
+			<div>
+				<label for="radiobrig">Listens to radio:</label>
+				<div>
+					<input type="radio" id="radioNo" name="radiobrig" value="0">
+					<label for="radioNo">No</label>
+				</div>
+				<div>
+					<input type="radio" id="radioNotAtAll" name="radiobrig" value="1">
+					<label for="radioNotAtAll">Not at all</label>
+				</div>
+				<div>
+					<input type="radio" id="radioYes" name="radiobrig" value="10">
+					<label for="radioYes">Yes</label>
+				</div>
+				<div>
+					<input type="radio" id="radioOnceAWeek" name="radiobrig" value="11">
+					<label for="radioOnceAWeek">At least once a week</label>
+				</div>
+				<div>
+					<input type="radio" id="radioAlmostEveryDay" name="radiobrig" value="12">
+					<label for="radioAlmostEveryDay">Almost every day</label>
+				</div>
+				<div>
+					<input type="radio" id="radioLessThanOnceAWeek" name="radiobrig" value="2">
+					<label for="radioLessThanOnceAWeek">Less than once a week</label>
+				</div>
+			</div>
+			<div>
+				<label for="decfemhcare">Final say on woman's health care:</label>
+				<select id="decfemhcare" name="decfemhcare">
+					<option value="1">Woman alone</option>
+					<option value="2">Woman and husband/partner</option>
+					<option value="3">Woman and someone else</option>
+					<option value="4">Husband/partner</option>
+					<option value="5">Someone else</option>
+					<option value="6">Other/not applicable</option>
+					<option value="9">NIU (not in universe)</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="fphctalkfp">At health facility told of family planning:</label>
+				<select id="fphctalkfp" name="fphctalkfp">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+					<option value="9">NIU (not in universe)</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="tvbrig">Watches television:</label>
+				<div>
+					<input type="radio" id="tvNo" name="tvbrig" value="0">
+					<label for="tvNo">No</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvNotAtAll" name="tvbrig" value="1">
+					<label for="tvNotAtAll">No, not at all</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvYes" name="tvbrig" value="10">
+					<label for="tvYes">Yes</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvOnceAWeek" name="tvbrig" value="11">
+					<label for="tvOnceAWeek">At least once a week</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvAlmostEveryDay" name="tvbrig" value="12">
+					<label for="tvAlmostEveryDay">Almost every day</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvLessThanOnceAWeek" name="tvbrig" value="2">
+					<label for="tvLessThanOnceAWeek">No, less than once a week</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="currwork">Currently working:</label>
+				<select id="currwork" name="currwork">
+					<option value="0">No</option>
+					<option value="10">Yes</option>
+					<option value="11">Yes, spontaneous</option>
+					<option value="12">Yes, prompted</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="fp1stuslvkid">Number living children at first use of FP:</label>
+				<input type="number" id="fp1stuslvkid" name="fp1stuslvkid">
+			</div>
+
+			<div>
+				<label for="fpradiohr">Heard FP message on radio:</label>
+				<div>
+					<input type="radio" id="radioNo" name="fpradiohr" value="0">
+					<label for="radioNo">No</label><br>
+				</div>
+				<div>
+					<input type="radio" id="radioYes" name="fpradiohr" value="10">
+					<label for="radioYes">Yes</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="fptvhr">Heard FP message on TV recently:</label>
+				<div>
+					<input type="radio" id="tvNo" name="fptvhr" value="0">
+					<label for="tvNo">No</label><br>
+				</div>
+				<div>
+					<input type="radio" id="tvYes" name="fptvhr" value="1">
+					<label for="tvYes">Yes</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="fpposthr">Seen FP message on poster or pamphlet:</label>
+				<div>
+					<input type="radio" id="posterNo" name="fpposthr" value="0">
+					<label for="posterNo">No</label><br>
+				</div>
+				<div>
+					<input type="radio" id="posterYes" name="fpposthr" value="1">
+					<label for="posterYes">Yes</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="newsbrig">Reads newspaper:</label>
+				<div>
+					<input type="radio" id="newsNo" name="newsbrig" value="0">
+					<label for="newsNo">No</label><br>
+				</div>
+				<div>
+					<input type="radio" id="newsNotAtAll" name="newsbrig" value="1">
+					<label for="newsNotAtAll">No, not at all</label><br>
+				</div>
+				<div>
+					<input type="radio" id="newsYes" name="newsbrig" value="10">
+					<label for="newsYes">Yes</label><br>
+				</div>
+				<div>
+					<input type="radio" id="newsOnceAWeek" name="newsbrig" value="11">
+					<label for="newsOnceAWeek">At least once a week</label><br>
+				</div>
+				<div>
+					<input type="radio" id="newsAlmostEveryDay" name="newsbrig" value="12">
+					<label for="newsAlmostEveryDay">Almost every day</label><br>
+				</div>
+				<div>
+					<input type="radio" id="newsLessThanOnceAWeek" name="newsbrig" value="2">
+					<label for="newsLessThanOnceAWeek">No, less than once a week</label><br>
+				</div>
+			</div>
+			<div>
+				<label for="fphomvisity">Visited by family planning worker in past 12 months:</label>
+				<div>
+					<input type="radio" id="visitNo" name="fphomvisity" value="0">
+					<label for="visitNo">No</label><br>
+					<input type="radio" id="visitYes" name="fphomvisity" value="1">
+					<label for="visitYes">Yes</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="hheadsex">Sex of household head:</label>
+				<div>
+					<input type="radio" id="male" name="hheadsex" value="1">
+					<label for="male">Male</label><br>
+					<input type="radio" id="female" name="hheadsex" value="2">
+					<label for="female">Female</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="newsfq">Frequency of reading newspaper or magazine:</label>
+				<select id="newsfq" name="newsfq">
+					<option value="0">Not at all</option>
+					<option value="10">Less than once a week</option>
+					<option value="20">Once a week or more</option>
+					<option value="21">At least once a week</option>
+					<option value="22">Almost every day</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="urban">Urban-rural status:</label>
+				<div>
+					<input type="radio" id="urban" name="urban" value="1">
+					<label for="urban">Urban</label><br>
+					<input type="radio" id="rural" name="urban" value="2">
+					<label for="rural">Rural</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="mobphone">HH has mobile phone:</label>
+				<div>
+					<input type="radio" id="phoneNo" name="mobphone" value="0">
+					<label for="phoneNo">No</label><br>
+					<input type="radio" id="phoneYes" name="mobphone" value="1">
+					<label for="phoneYes">Yes</label><br>
+				</div>
+			</div>
+
+			<div>
+				<label for="fertpref">Fertility preferences:</label>
+				<select id="fertpref" name="fertpref">
+					<option value="10">Have another</option>
+					<option value="20">Undecided</option>
+					<option value="30">No more</option>
+					<option value="51">Sterilized</option>
+					<option value="52">Declared infecund</option>
+					<option value="53">Never had sex</option>
+					<option value="99">NIU (not in universe)</option>
+				</select>
+			</div>
+			<input type="submit" value="Predict">
+		</div>
+	</form>
+</body>
+
+</html>

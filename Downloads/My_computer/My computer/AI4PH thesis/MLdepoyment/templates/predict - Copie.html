@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>ML Deployment on Contraceptive Discontinuation</title>
+	<!-- Add Bootstrap CSS link -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1 class="mt-4">ML Deployment CD in Guinea</h1>
+
+		{% if metrics %}
+		<div class="mt-4">
+			<h2>Prediction:</h2>
+			<p class="lead">The predicted label is <strong>{{ metrics['Prediction'] }}</strong></p>
+		</div>
+
+		<div class="mt-4">
+			<h2>Classification Metrics:</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Metric</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>No Discontinuation Probability</td>
+						<td>{{ metrics['No Discontinuation Probability'] }}</td>
+					</tr>
+					<tr>
+						<td>Discontinuation Probability</td>
+						<td>{{ metrics['Discontinuation Probability'] }}</td>
+					</tr>
+					<tr>
+						<td>Accuracy</td>
+						<td>{{ metrics['Accuracy'] }}</td>
+					</tr>
+					<tr>
+						<td>Precision</td>
+						<td>{{ metrics['Precision'] }}</td>
+					</tr>
+					<tr>
+						<td>Recall</td>
+						<td>{{ metrics['Recall'] }}</td>
+					</tr>
+					<tr>
+						<td>F1 Score</td>
+						<td>{{ metrics['F1 Score'] }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		{% else %}
+		<div class="mt-4">
+			<h2>Error:</h2>
+			<p>An error occurred during prediction. Please try again.</p>
+		</div>
+		{% endif %}
+	</div>
+	<!-- Add Bootstrap JS scripts -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
