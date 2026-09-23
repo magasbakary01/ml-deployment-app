@@ -1,0 +1,81 @@
+region,pays,nom,episodes
+BF_boucle-du-mouhoun,BF,Boucle Du Mouhoun,469
+BF_cascades,BF,Cascades,347
+BF_centre,BF,Centre,756
+BF_centre-est,BF,Centre Est,574
+BF_centre-nord,BF,Centre Nord,377
+BF_centre-ouest,BF,Centre Ouest,435
+BF_centre-sud,BF,Centre Sud,513
+BF_est,BF,Est,253
+BF_hauts-bassins,BF,Hauts-Bassins,763
+BF_nord,BF,Nord,476
+BF_plateau-central,BF,Plateau Central,500
+BF_sahel,BF,Sahel,197
+BF_sud-ouest,BF,Sud-Ouest,459
+CI_abidjan,CI,Abidjan,369
+CI_bas-sassandra,CI,Bas Sassandra,231
+CI_comoe,CI,Comoe,146
+CI_denguele,CI,Denguele,143
+CI_goh-djiboua,CI,Goh-Djiboua,170
+CI_lacs,CI,Lacs,252
+CI_lagunes,CI,Lagunes,232
+CI_montagnes,CI,Montagnes,219
+CI_sassandra-marahoue,CI,Sassandra-Marahoue,277
+CI_savanes,CI,Savanes,149
+CI_vallee-du-bandama,CI,Vallee Du Bandama,162
+CI_woroba,CI,Woroba,182
+CI_yamoussoukro,CI,Yamoussoukro,241
+CI_zanzan,CI,Zanzan,133
+GH_ahafo,GH,Ahafo,314
+GH_ashanti,GH,Ashanti,561
+GH_bono,GH,Bono,294
+GH_bono-east,GH,Bono East,258
+GH_central,GH,Central,511
+GH_eastern,GH,Eastern,341
+GH_greater-accra,GH,Greater Accra,275
+GH_north-east,GH,North East,260
+GH_northern,GH,Northern,292
+GH_oti,GH,Oti,338
+GH_savannah,GH,Savannah,301
+GH_upper-east,GH,Upper East,345
+GH_upper-west,GH,Upper West,334
+GH_volta,GH,Volta,275
+GH_western,GH,Western,333
+GH_western-north,GH,Western North,182
+GN_boke,GN,Boké,70
+GN_conakry,GN,Conakry,282
+GN_faranah,GN,Faranah,119
+GN_kankan,GN,Kankan,0
+GN_kindia,GN,Kindia,137
+GN_labe,GN,Labé,21
+GN_mamou,GN,Mamou,65
+GN_n-zerekore,GN,N'Zérékoré,300
+ML_bamako,ML,Bamako,720
+ML_gao,ML,Gao,41
+ML_kayes,ML,Kayes,601
+ML_kidal,ML,Kidal,13
+ML_koulikoro,ML,Koulikoro,739
+ML_mopti,ML,Mopti,296
+ML_segou,ML,Ségou,643
+ML_sikasso,ML,Sikasso,532
+ML_tombouctou,ML,Tombouctou,168
+NG_north-central,NG,North Central,1320
+NG_north-east,NG,North East,984
+NG_north-west,NG,North West,963
+NG_south-east,NG,South East,1110
+NG_south-south,NG,South South,1289
+NG_south-west,NG,South West,1494
+SN_dakar,SN,Dakar,319
+SN_diourbel,SN,Diourbel,168
+SN_fatick,SN,Fatick,207
+SN_kaffrine,SN,Kaffrine,308
+SN_kaolack,SN,Kaolack,223
+SN_kedougou,SN,Kedougou,129
+SN_kolda,SN,Kolda,206
+SN_louga,SN,Louga,163
+SN_matam,SN,Matam,102
+SN_saint-louis,SN,Saint-Louis,239
+SN_sedhiou,SN,Sedhiou,166
+SN_tambacounda,SN,Tambacounda,85
+SN_thies,SN,Thiès,384
+SN_ziguinchor,SN,Ziguinchor,140

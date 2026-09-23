@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}À propos du modèle{% endblock %}
+{% block content %}
+{% set method_names = {'pill': 'Pilule', 'injectable': 'Injectable', 'implant': 'Implant', 'iud': 'DIU', 'condom': 'Préservatif',
+                       'lam': 'MAMA', 'natural': 'Méthode naturelle', 'other': 'Autre'} %}
+<h1>À propos du modèle</h1>
+<section class="card">
+  <p><strong>Ce qui est prédit :</strong> la probabilité qu'une femme qui démarre (ou poursuit) une méthode l'arrête dans les
+    12 mois alors qu'elle a encore besoin de contraception (effets secondaires, opposition du partenaire, grossesse sous méthode,
+    accès, coût…). Les arrêts pour désirer une grossesse et les changements de méthode ne sont pas comptés.</p>
+  <p><strong>Données :</strong> calendrier contraceptif mois par mois des Enquêtes démographiques et de santé (DHS) :
+    {{ m.enquetes|join(', ') }}. {{ m.n }} épisodes d'utilisation suivis 12 mois ; {{ '%.0f'|format(m.prevalence * 100) }} %
+    se sont terminés par un arrêt en situation de besoin.</p>
+  <p><strong>Modèle :</strong> LightGBM, entraîné le {{ m.date }}. Principales variables : méthode, pays et région,
+    délai depuis la dernière naissance, âge, arrêts et méthodes antérieurs.</p>
+</section>
+
+<section class="card">
+  <h2>Performance (validation croisée, villages séparés)</h2>
+  <table>
+    <tr><th>AUC</th><td>{{ m.auc }}</td></tr>
+    <tr><th>AUC précision-rappel</th><td>{{ m.pr_auc }}</td></tr>
+    <tr><th>Score de Brier</th><td>{{ m.brier }}</td></tr>
+  </table>
+  <h3>Niveaux de risque</h3>
+  <table>
+    <tr><th>Niveau</th><th>Part des épisodes</th><th>Taux d'arrêt observé</th></tr>
+    {% for k, t in m.niveaux_de_risque.items() %}
+    <tr><td>{{ k }}</td><td>{{ '%.0f'|format(t.part * 100) }} %</td><td>{{ '%.0f'|format(t.taux_arret_observe * 100) }} %</td></tr>
+    {% endfor %}
+  </table>
+  <h3>Par méthode</h3>
+  <table>
+    <tr><th>Méthode</th><th>Épisodes</th><th>Taux d'arrêt observé</th><th>Taux prédit</th></tr>
+    {% for k, t in m.par_methode.items()|sort(attribute='1.n', reverse=True) %}
+    <tr><td>{{ method_names.get(k, k) }}</td><td>{{ t.n }}</td><td>{{ '%.0f'|format(t.observe * 100) }} %</td><td>{{ '%.0f'|format(t.predit * 100) }} %</td></tr>
+    {% endfor %}
+  </table>
+  <h3>Par pays</h3>
+  <table>
+    <tr><th>Pays</th><th>Épisodes</th><th>Taux d'arrêt</th><th>AUC</th><th>AUC si le pays est exclu de l'entraînement</th></tr>
+    {% for c, t in m.par_pays.items() %}
+    <tr><td>{{ countries[c] }}</td><td>{{ t.n }}</td><td>{{ '%.0f'|format(t.prevalence * 100) }} %</td><td>{{ t.auc }}</td><td>{{ m.auc_pays_non_vu[c] }}</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section class="card">
+  <h2>Limites</h2>
+  <ul>
+    <li>La méthode, l'âge, la parité, le délai depuis la dernière naissance et les arrêts antérieurs sont mesurés au démarrage
+      de chaque épisode. Les autres caractéristiques (couple, instruction, information PF…) sont mesurées lors de l'enquête,
+      jusqu'à 5 ans après.</li>
+    {% for e in m.exclusions %}<li>Données exclues : {{ e }}.</li>{% endfor %}
+    <li>Le modèle doit être validé sur des patientes suivies dans les structures de santé avant un usage à grande échelle.</li>
+    <li>Les textes de conseil doivent être validés par un clinicien.</li>
+  </ul>
+</section>
+{% endblock %}

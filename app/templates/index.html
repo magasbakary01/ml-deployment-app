@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% macro select(name, label, options, required=False) %}
+  <label>{{ label }}
+    <select name="{{ name }}" {% if required %}required{% endif %}>
+      <option value="">— {% if required %}choisir{% else %}ne sait pas / non renseigné{% endif %} —</option>
+      {% for val, text in options %}<option value="{{ val }}" {% if v.get(name) == val|string %}selected{% endif %}>{{ text }}</option>{% endfor %}
+    </select>
+  </label>
+{% endmacro %}
+{% macro number(name, label, lo, hi, required=True) %}
+  <label>{{ label }}<input type="number" name="{{ name }}" min="{{ lo }}" max="{{ hi }}" value="{{ v.get(name, '') }}" {% if required %}required{% endif %}></label>
+{% endmacro %}
+{% block content %}
+<h1>Nouvelle patiente</h1>
+<p class="intro">Questions à poser lors d'une consultation de planification familiale (environ 2 minutes).</p>
+<form method="post" action="{{ url_for('predict') }}">
+  <fieldset><legend>Consultation</legend>
+    <div class="grid">
+      {{ select('visit_type', 'Type de visite', visit_types.items()) }}
+      {{ select('method', 'Méthode choisie ou utilisée', methods.items(), True) }}
+      {{ select('side_effects_now', 'Ressent-elle actuellement des effets secondaires ?', [('1', 'Oui'), ('0', 'Non')]) }}
+      {{ select('prior_methods', 'Au cours des 5 dernières années, combien de méthodes (ou périodes d’utilisation) avant celle-ci ?', [('0', 'Aucune'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4 ou plus')]) }}
+      {{ select('prior_disc', 'Au cours des 5 dernières années, combien de fois a-t-elle arrêté une méthode alors qu’elle voulait encore éviter une grossesse ?', [('0', 'Jamais'), ('1', '1 fois'), ('2', '2 fois'), ('3', '3 fois ou plus')]) }}
+      <div class="prior-only">{{ select('prior_method', 'Méthode arrêtée (la dernière fois)', methods.items()) }}</div>
+      <div class="prior-only">{{ select('prior_reason', 'Pourquoi ?', prior_reasons.items()) }}</div>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Lieu de résidence</legend>
+    <div class="grid">
+      <label>Pays
+        <select name="country" id="country" required>
+          {% for code, name in countries.items() %}<option value="{{ code }}" {% if v.get('country') == code %}selected{% endif %}>{{ name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label>Région
+        <select name="region" id="region" required data-selected="{{ v.get('region', '') }}"></select>
+      </label>
+      {{ select('urban', 'Milieu', [('1', 'Urbain'), ('0', 'Rural')], True) }}
+    </div>
+  </fieldset>
+
+  <fieldset><legend>La patiente</legend>
+    <div class="grid">
+      {{ number('age', 'Âge (années)', 15, 49) }}
+      {{ number('cheb', "Nombre d'enfants nés vivants", 0, 20) }}
+      {{ number('kids_lt5', "Enfants nés au cours des 5 dernières années", 0, 20) }}
+      {{ number('months_since_birth', "Mois depuis la dernière naissance (vide si aucun enfant)", 0, 600, False) }}
+      {{ select('edu_level', "Niveau d'instruction", [('0', 'Aucun'), ('1', 'Primaire'), ('2', 'Secondaire'), ('3', 'Supérieur')]) }}
+      {{ select('religion', 'Religion', [('muslim', 'Musulmane'), ('christian', 'Chrétienne'), ('traditional', 'Traditionnelle'), ('none', 'Aucune'), ('other', 'Autre')]) }}
+      {{ select('working', 'Travaille actuellement', [('1', 'Oui'), ('0', 'Non')]) }}
+      {{ select('mobphone', 'Téléphone portable dans le ménage', [('1', 'Oui'), ('0', 'Non')]) }}
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Couple et projet d'enfants</legend>
+    <div class="grid">
+      {{ select('marstat', 'Situation matrimoniale', [('married', 'Mariée'), ('union', 'En union libre'), ('never', 'Jamais mariée'), ('widowed', 'Veuve'), ('divorced', 'Divorcée'), ('separated', 'Séparée')], True) }}
+      {{ select('fertpref', "Souhaite-t-elle d'autres enfants ?", [('more', 'Oui'), ('nomore', 'Non'), ('undecided', 'Indécise'), ('infecund', 'Se déclare inféconde')]) }}
+      <div class="union-only">{{ select('hus_pref', "Le mari souhaite-t-il autant d'enfants qu'elle ?", [('same', 'Même nombre'), ('more', 'Plus'), ('fewer', 'Moins'), ('dk', 'Ne sait pas')]) }}</div>
+      <div class="union-only">{{ select('dec_health', 'Qui décide de ses soins de santé ?', [('alone', 'Elle seule'), ('joint', 'Elle et son mari'), ('husband', 'Le mari'), ('other', 'Quelqu’un d’autre')]) }}</div>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Information sur la PF</legend>
+    <div class="grid">
+      {{ select('hc_talkfp', 'Dans les 12 derniers mois, lors d’une visite dans une structure de santé, lui a-t-on parlé de PF ?', [('yes', 'Oui'), ('no', 'Non'), ('novisit', 'Aucune visite')]) }}
+      {{ select('radio_fq', 'Écoute la radio', [('0', 'Jamais'), ('1', 'Moins d’une fois par semaine'), ('2', 'Au moins une fois par semaine'), ('3', 'Presque tous les jours')]) }}
+      {{ select('fp_radio', 'A entendu un message PF à la radio récemment', [('1', 'Oui'), ('0', 'Non')]) }}
+      {{ select('fp_tv', 'A entendu un message PF à la télévision récemment', [('1', 'Oui'), ('0', 'Non')]) }}
+    </div>
+  </fieldset>
+  <button type="submit">Estimer le risque</button>
+</form>
+
+<script>
+  const REGIONS = {{ regions|tojson }};
+  const country = document.getElementById('country'), region = document.getElementById('region');
+  function fillRegions() {
+    const sel = region.dataset.selected;
+    region.innerHTML = '<option value="">— choisir —</option>' +
+      (REGIONS[country.value] || []).map(([k, n]) => `<option value="${k}" ${k === sel ? 'selected' : ''}>${n}</option>`).join('');
+  }
+  country.addEventListener('change', () => { region.dataset.selected = ''; fillRegions(); });
+  fillRegions();
+  const marstat = document.querySelector('[name=marstat]');
+  function toggleUnion() {
+    const inUnion = ['married', 'union'].includes(marstat.value);
+    document.querySelectorAll('.union-only').forEach(el => el.hidden = !inUnion);
+  }
+  marstat.addEventListener('change', toggleUnion); toggleUnion();
+  const priorDisc = document.querySelector('[name=prior_disc]');
+  function togglePrior() {
+    document.querySelectorAll('.prior-only').forEach(el => el.hidden = ['', '0'].includes(priorDisc.value));
+  }
+  priorDisc.addEventListener('change', togglePrior); togglePrior();
+</script>
+{% endblock %}

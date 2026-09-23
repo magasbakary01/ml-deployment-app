@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Résultat</h1>
+<p class="intro">{{ region }}, {{ country }}</p>
+
+<section class="card tier-{{ {'faible': 'low', 'moyen': 'mid', 'élevé': 'high'}[r.tier] }}">
+  <div class="tier">{{ r.tier_label }}</div>
+  <div class="proba">Probabilité estimée d'arrêter cette méthode dans les 12 mois alors qu'elle en a encore besoin : <strong>{{ '%.0f'|format(r.proba * 100) }} %</strong></div>
+  {% if r.observed_rate is not none %}
+  <p class="note">Chez les femmes classées « {{ r.tier }} » lors de la validation, {{ '%.0f'|format(r.observed_rate * 100) }} % ont arrêté.</p>
+  {% endif %}
+  <p><strong>Conduite proposée :</strong> {{ r.action }}</p>
+  {% if r.region_note %}<p class="note">⚠ {{ r.region_note }}</p>{% endif %}
+</section>
+
+{% if a.alerts %}
+<section class="card">
+  <h2>Points d'attention</h2>
+  <ul class="alerts">{% for level, text in a.alerts %}<li class="{{ level }}">{{ text }}</li>{% endfor %}</ul>
+</section>
+{% endif %}
+
+{% if a.method %}
+<section class="card">
+  <h2>Méthode : {{ a.method.label }}{% if a.visit %} <span class="note">({{ a.visit }})</span>{% endif %}</h2>
+  <dl class="method">
+    <dt>Effets à expliquer</dt><dd>{{ a.method.effects }}</dd>
+    {% if a.method.todo %}<dt>Conduite à tenir</dt><dd>{{ a.method.todo }}</dd>{% endif %}
+    {% if a.method.next %}<dt>Prochain rendez-vous</dt><dd>{{ a.method.next }}</dd>{% endif %}
+  </dl>
+</section>
+{% endif %}
+
+<section class="card">
+  <h2>Motif d'arrêt le plus probable</h2>
+  <ul class="bars">
+    {% for label, share, _ in r.reasons %}
+    <li><span>{{ label }}</span><span class="bar"><span style="width: {{ '%.0f'|format(share * 100) }}%"></span></span><span>{{ '%.0f'|format(share * 100) }} %</span></li>
+    {% endfor %}
+  </ul>
+  <p><strong>Conseil ciblé :</strong> {{ r.counsel }}</p>
+</section>
+
+<section class="card two">
+  <div>
+    <h2>Ce qui augmente le risque</h2>
+    <ul>{% for k, _ in r.up %}<li>{{ k }}</li>{% else %}<li>Aucun facteur marquant</li>{% endfor %}</ul>
+  </div>
+  <div>
+    <h2>Ce qui diminue le risque</h2>
+    <ul>{% for k, _ in r.down %}<li>{{ k }}</li>{% else %}<li>Aucun facteur marquant</li>{% endfor %}</ul>
+  </div>
+</section>
+<p><a class="button" href="{{ url_for('index') }}">Nouvelle patiente</a></p>
+{% endblock %}

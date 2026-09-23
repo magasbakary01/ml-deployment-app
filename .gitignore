@@ -1,0 +1,8 @@
+data/*.csv
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.pytest_cache/
+*.pyc
+data/*.zip
+data/dhs_ir/

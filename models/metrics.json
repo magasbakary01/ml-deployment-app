@@ -1,0 +1,182 @@
+{
+ "n": 28985,
+ "prevalence": 0.226,
+ "auc": 0.752,
+ "pr_auc": 0.479,
+ "brier": 0.1485,
+ "niveaux_de_risque": {
+  "faible": {
+   "part": 0.662,
+   "taux_arret_observe": 0.127
+  },
+  "moyen": {
+   "part": 0.245,
+   "taux_arret_observe": 0.356
+  },
+  "élevé": {
+   "part": 0.093,
+   "taux_arret_observe": 0.58
+  }
+ },
+ "taux_par_decile": [
+  0.039,
+  0.077,
+  0.098,
+  0.131,
+  0.155,
+  0.195,
+  0.249,
+  0.326,
+  0.412,
+  0.575
+ ],
+ "par_pays": {
+  "BF": {
+   "n": 6119,
+   "prevalence": 0.151,
+   "auc": 0.754
+  },
+  "CI": {
+   "n": 2906,
+   "prevalence": 0.207,
+   "auc": 0.713
+  },
+  "GH": {
+   "n": 5214,
+   "prevalence": 0.312,
+   "auc": 0.729
+  },
+  "GN": {
+   "n": 994,
+   "prevalence": 0.334,
+   "auc": 0.769
+  },
+  "ML": {
+   "n": 3753,
+   "prevalence": 0.231,
+   "auc": 0.743
+  },
+  "NG": {
+   "n": 7160,
+   "prevalence": 0.211,
+   "auc": 0.751
+  },
+  "SN": {
+   "n": 2839,
+   "prevalence": 0.238,
+   "auc": 0.727
+  }
+ },
+ "auc_pays_non_vu": {
+  "BF": 0.728,
+  "CI": 0.707,
+  "GH": 0.716,
+  "GN": 0.62,
+  "ML": 0.731,
+  "NG": 0.72,
+  "SN": 0.734
+ },
+ "par_methode": {
+  "condom": {
+   "n": 2362,
+   "observe": 0.143,
+   "predit": 0.135
+  },
+  "implant": {
+   "n": 9691,
+   "observe": 0.123,
+   "predit": 0.122
+  },
+  "injectable": {
+   "n": 6906,
+   "observe": 0.386,
+   "predit": 0.378
+  },
+  "iud": {
+   "n": 832,
+   "observe": 0.124,
+   "predit": 0.122
+  },
+  "lam": {
+   "n": 890,
+   "observe": 0.303,
+   "predit": 0.292
+  },
+  "natural": {
+   "n": 3933,
+   "observe": 0.125,
+   "predit": 0.123
+  },
+  "other": {
+   "n": 740,
+   "observe": 0.369,
+   "predit": 0.366
+  },
+  "pill": {
+   "n": 3631,
+   "observe": 0.334,
+   "predit": 0.331
+  }
+ },
+ "motif_auc": {
+  "continue": 0.752,
+  "effets_secondaires": 0.78,
+  "mari": 0.757,
+  "echec": 0.782,
+  "autre": 0.737
+ },
+ "date": "2026-09-23",
+ "enquetes": [
+  "BFIR81",
+  "CIIR81",
+  "GHIR8C",
+  "GNIR71",
+  "MLIR8A",
+  "NGIR8B",
+  "SNIR8S"
+ ],
+ "cible": "arrêt de la méthode en situation de besoin dans les 12 mois suivant le démarrage",
+ "exclusions": [
+  "Guinée 2018, région de Kankan : calendrier anormal (3,0 épisodes par utilisatrice contre 1,2 à 1,5 ailleurs ; 861 épisodes de 3 mois ou moins ; 86 % d'arrêts)"
+ ],
+ "variables": [
+  "method",
+  "age",
+  "cheb",
+  "kids_lt5",
+  "months_since_birth",
+  "prior_stops",
+  "prior_se_stops",
+  "prior_methods",
+  "marstat",
+  "fertpref",
+  "hus_pref",
+  "dec_health",
+  "hc_talkfp",
+  "religion",
+  "edu_level",
+  "urban",
+  "working",
+  "mobphone",
+  "radio_fq",
+  "fp_radio",
+  "fp_tv",
+  "country",
+  "region"
+ ],
+ "parametres": {
+  "objective": "binary",
+  "learning_rate": 0.03,
+  "num_leaves": 63,
+  "min_child_samples": 100,
+  "subsample": 0.8,
+  "subsample_freq": 1,
+  "colsample_bytree": 0.9,
+  "reg_lambda": 5.0,
+  "n_estimators": 300,
+  "verbose": -1,
+  "max_cat_to_onehot": 4,
+  "cat_smooth": 20,
+  "random_state": 0
+ }
+}
