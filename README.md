@@ -20,8 +20,8 @@ data/dhs_ir/            fichiers femmes DHS (XXIRnnDT.zip) — non versionnés (
 data/episodes.csv       base par épisode générée — non versionnée
 ```
 
-L'ancienne application (`Downloads/My_computer/.../MLdepoyment/`) et l'extrait IPUMS (`data/idhs_00009.csv`) ne
-sont plus utilisés par le modèle.
+L'extrait IPUMS (`data/idhs_00009.csv`) n'est plus utilisé par le modèle. L'ancienne application (modèle de
+l'article) a été retirée du dépôt ; elle reste consultable dans l'historique Git (commit `a219444`).
 
 ## Installation
 
